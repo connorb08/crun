@@ -12,23 +12,44 @@ import os
 from time import sleep
 
 # CONFIG
-HOSTNAME = 'yarpvk8worker08.dev.tylertechnologies.com'
-HTTP_PORT = 31710
+USER = 'connorbray'
+HOSTNAME = 'eerpdev.dev.tylertechnologies.com'
+
+# Pass args: 
+
+'''
+
+
+r/application/txbldtmt?Arg=hello&Arg=world&Arg=third
+
+is the equivalent to "mrun txbldtmt hello world third"
+
+'''
 
 # Main function
 # program : String to represent program name
 # build : Boolean to represent if program should be built first
-def main(program, build):
+def main(program, build, arg_list):
 
     # Build first if b flag is given
     if build:
-        cwd = os.cwd()
+        cwd = os.curdir
         os.chdir('/workspace/src')
         subprocess.run(['bb', program])
         os.chdir(cwd)
 
     # Format URL
-    url = f'http://{HOSTNAME}:{HTTP_PORT}/gas/ua/r/application/{program}'
+    args = '?'
+    for arg in arg_list:
+        args += f"Arg={arg}&"
+
+    url = f'https://{USER}.{HOSTNAME}/gas/ua/r/application/{program}{args}'
+
+    print(f"url: {url}")
+
+
+    # Does GAS need to be restarted every time?
+
 
     # Kill any old GAS sessions
     subprocess.run(['pkill', 'fastcgidispatch'])
@@ -49,7 +70,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser('run')
     parser.add_argument('program', type=str, help='munis program to run in browser', )
     parser.add_argument('-b', action='store_true')
+    parser.add_argument('program_args', nargs='*', type=str, help='pass args into program')
     args = parser.parse_args()
 
     # Pass arguments to main
-    main(args.program, args.b)
+    main(args.program, args.b, args.program_args)
