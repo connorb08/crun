@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+
+# Author: Connor Bray
+# Date: 6/8/2022
+# Purpose: Run programs from command line and open in browser
+
+# Imports
+import argparse
+import webbrowser
+import subprocess
+import os
+from time import sleep
+
+# CONFIG
+HOSTNAME = 'yarpvk8worker08.dev.tylertechnologies.com'
+HTTP_PORT = 31710
+
+# Main function
+# program : String to represent program name
+# build : Boolean to represent if program should be built first
+def main(program, build):
+
+    # Build first if b flag is given
+    if build:
+        cwd = os.cwd()
+        os.chdir('/workspace/src')
+        subprocess.run(['bb', program])
+        os.chdir(cwd)
+
+    # Format URL
+    url = f'http://{HOSTNAME}:{HTTP_PORT}/gas/ua/r/application/{program}'
+
+    # Kill any old GAS sessions
+    subprocess.run(['pkill', 'fastcgidispatch'])
+    sleep(3)
+
+    # Start GAS in background
+    subprocess.Popen(['startgas'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+
+    # Open URL in new tab
+    webbrowser.open_new_tab(url)
+
+    return 0
+
+
+if __name__ == '__main__':
+
+    # Create program arguments
+    parser = argparse.ArgumentParser('run')
+    parser.add_argument('program', type=str, help='munis program to run in browser', )
+    parser.add_argument('-b', action='store_true')
+    args = parser.parse_args()
+
+    # Pass arguments to main
+    main(args.program, args.b)
