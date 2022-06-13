@@ -55,9 +55,8 @@ def getUserFromConfig():
 
     try:
         # Get user from config
-        f = open('/usr/local/etc/crun_config.json', 'r')
-        config = json.load(f)
-        f.close()
+        with open('/usr/local/etc/crun_config.json', 'r') as f:
+            config = json.load(f)
         user = config['user']
     except: # return 0 if there is error getting user from file
         return 0
