@@ -9,13 +9,14 @@ import argparse
 import webbrowser
 import subprocess
 import os
-# import json
+import json
 
 # Pull config from /usr/local/etc
 # Ask for firstlast in setup. If they enter work email or AD name, remove the . and the @tylertech.com from the end
 
 # CONFIG
-USER = 'connorbray'
+# USER = 'connorbray'
+CRUN_USER = ''
 HOSTNAME = 'eerpdev.dev.tylertechnologies.com'
 
 # Read from config file
@@ -32,6 +33,10 @@ is the equivalent to "mrun txbldtmt hello world third"
 
 '''
 
+
+
+
+
 # Main function
 # program : String to represent program name
 # arg_list : 
@@ -39,7 +44,6 @@ def main(program, arg_list):
     '''
     Add doc string
     '''
-
 
     # Check if GAS is running
     gasOffline = not (subprocess.run(['pgrep', '-lf', 'fastcgidispatch'], capture_output=True, text=True).stdout)
@@ -58,13 +62,42 @@ def main(program, arg_list):
     args = '?'
     for arg in arg_list:
         args += f"Arg={arg}&"
-    url = f'https://{USER}.{HOSTNAME}/gas/ua/r/application/{program}{args}'
+    url = f'https://{CRUN_USER}.{HOSTNAME}/gas/ua/r/application/{program}{args}'
 
     # Open URL in new tab
     webbrowser.open_new_tab(url)
 
     return 0
 
+def getUserFromConfig():
+
+    try:
+        # Get user from config
+        f = open('/usr/local/etc/crun_config.json', 'r')
+        config = json.load(f)
+        f.close()
+        user = config['user']
+    except: # return 0 if there is error getting user from file
+        return 0
+
+    return user
+
+def getUser():
+
+    # try: 
+    #     user = os.environ['CRUN_USER']
+    # except KeyError: # get value from config file and set env variable to match that
+    #     user = getUserFromConfig()
+    
+    user = getUserFromConfig()
+
+    if user:
+        return user
+
+    else:
+        print("Error getting user")
+        exit()
+        return 0
 
 if __name__ == '__main__':
 
@@ -73,13 +106,7 @@ if __name__ == '__main__':
     parser.add_argument('program', type=str, help='munis program to run in browser', )
     parser.add_argument('program_args', nargs='*', type=str, help='pass args into program')
     args = parser.parse_args()
+    CRUN_USER = getUser()
 
     # Pass arguments to main
     main(args.program, args.program_args)
-
-
-def getvar():
-    try: 
-        user = os.environ['USER']
-    except KeyError: # get value from config file and set env variable to match that
-        pass
