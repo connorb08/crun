@@ -19,24 +19,6 @@ import json
 CRUN_USER = ''
 HOSTNAME = 'eerpdev.dev.tylertechnologies.com'
 
-# Read from config file
-# Set name to env variable? check if it is set. if it is not, read from config file
-
-# Pass args: 
-
-'''
-
-
-r/application/txbldtmt?Arg=hello&Arg=world&Arg=third
-
-is the equivalent to "mrun txbldtmt hello world third"
-
-'''
-
-
-
-
-
 # Main function
 # program : String to represent program name
 # arg_list : 
