@@ -3,3 +3,6 @@ include/
 lib/
 lib64
 share/
+build/
+dist/
+crun.spec
