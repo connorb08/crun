@@ -11,7 +11,7 @@ def getUser():
 
     # Get input
     print('Enter SSO domain name or Tyler Technologies email')
-    user = input('User: ').strip()
+    user = "".join(input('User: ').split())
 
     # Format properly
     user = user.replace('@tylertech.com', '')
