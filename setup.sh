@@ -10,3 +10,7 @@ mv src/tums /usr/local/bin/tums
 
 # Run setup.py script
 python3 src/setup.py
+
+# Clean files
+rm -rf src/
+rm -- $0
