@@ -1,1 +1,2 @@
-1. Add a flag to set LOGNAME
+1. Add a flag to set LOGNAME - Cannot do without restarting GAS
+2. Add a flag to view GAS output
