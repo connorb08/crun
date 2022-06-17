@@ -4,7 +4,7 @@ import json
 
 def main():
 
-    with open('/usr/local/etc/crun_config.json', 'w') as f:
+    with open('/mnt/user-data/usr/local/etc/crun_config.json', 'w') as f:
         json.dump(getUser(), f)
 
 def getUser():
