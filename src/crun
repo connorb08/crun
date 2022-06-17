@@ -11,20 +11,16 @@ import subprocess
 import os
 import json
 
-# Pull config from /usr/local/etc
-# Ask for firstlast in setup. If they enter work email or AD name, remove the . and the @tylertech.com from the end
-
 # CONFIG
-# USER = 'connorbray'
 CRUN_USER = ''
 HOSTNAME = 'eerpdev.dev.tylertechnologies.com'
 
 # Main function
 # program : String to represent program name
-# arg_list : 
+# arg_list : Arguments to pass into program
 def main(program, arg_list):
     '''
-    Add doc string
+    Doc string
     '''
 
     # Check if GAS is running
@@ -65,11 +61,6 @@ def getUserFromConfig():
 
 def getUser():
 
-    # try: 
-    #     user = os.environ['CRUN_USER']
-    # except KeyError: # get value from config file and set env variable to match that
-    #     user = getUserFromConfig()
-    
     user = getUserFromConfig()
 
     if user:
