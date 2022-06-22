@@ -39,6 +39,26 @@ def main(program, arg_list, debug):
         
         # Start gas in background tmux window
         subprocess.run(['tmux', 'new', '-d', '-s', 'crun', gas])
+    
+    # If gas is running in background and debugging is enabled,
+    # kill current gas service and start in debug mode
+    else:
+        if debug:
+            
+            # kill gas service
+            subprocess.run(['pkill', 'fastcgidispatch'])
+            
+            print('Restarting GAS in debug mode...')
+
+            # wait for tmux session to come offline before restarting
+            tmux_exists = not subprocess.run(['tmux', 'has-session', '-t', 'crun']).returncode
+            while (tmux_exists):
+                tmux_exists = not subprocess.run(['tmux', 'has-session', '-t', 'crun'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).returncode
+            
+            # Start gas in tmux window
+            subprocess.run(['tmux', 'new', '-d', '-s', 'crun', 'startgas'])
+            print('Gas started in debug mode. Run \'gaslog\' to view')
+
 
     # Build program
     cwd = os.curdir
