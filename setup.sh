@@ -6,8 +6,8 @@ chmod +x src/crun
 chmod +x src/gaslog
 
 #Create directories
-mkdir /mnt/user-data/usr/local/bin/
-mkdir /mnt/user-data/usr/local/etc/
+mkdir -p /mnt/user-data/usr/local/bin/
+mkdir -p /mnt/user-data/usr/local/etc/
 
 # Move files to correct directory
 cp src/crun /mnt/user-data/usr/local/bin/crun
