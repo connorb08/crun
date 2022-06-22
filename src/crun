@@ -18,17 +18,23 @@ HOSTNAME = 'eerpdev.dev.tylertechnologies.com'
 # Main function
 # program : String to represent program name
 # arg_list : Arguments to pass into program
-def main(program, arg_list):
+def main(program, arg_list, debug):
     '''
     Doc string
     '''
 
     # Check if GAS is running
-    gasOffline = not (subprocess.run(['pgrep', '-lf', 'fastcgidispatch'], capture_output=True, text=True).stdout)
+    gasOffline = not (subprocess.run(['pgrep', '-lf', 'fastcgidispatch'], capture_output=True, text=True).stdout).strip()
 
     # Start GAS in the background if it is not running
     if gasOffline:
-        subprocess.Popen(['startgas'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        
+        gas = 'startgas 2> /dev/null'
+        
+        if debug:
+            gas = 'startgas'
+            
+        subprocess.run(['tmux', 'new', '-d', '-s', 'crun', gas])
 
     # Build program
     cwd = os.curdir
@@ -47,7 +53,7 @@ def main(program, arg_list):
 
     return 0
 
-def getUserFromConfig():
+def getUser():
 
     try:
         # Get user from config
@@ -55,21 +61,10 @@ def getUserFromConfig():
             config = json.load(f)
         user = config['user']
     except: # return 0 if there is error getting user from file
-        return 0
-
-    return user
-
-def getUser():
-
-    user = getUserFromConfig()
-
-    if user:
-        return user
-
-    else:
         print("Error getting user")
         exit()
-        return 0
+
+    return user
 
 if __name__ == '__main__':
 
@@ -77,8 +72,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser('run')
     parser.add_argument('program', type=str, help='munis program to run in browser', )
     parser.add_argument('program_args', nargs='*', type=str, help='pass args into program')
+    parser.add_argument('-d', action='store_true')
     args = parser.parse_args()
     CRUN_USER = getUser()
 
     # Pass arguments to main
-    main(args.program, args.program_args)
+    main(args.program, args.program_args, args.d)
+    # gasLogging()
