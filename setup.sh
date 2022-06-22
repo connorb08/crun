@@ -6,9 +6,9 @@ chmod +x src/crun
 chmod +x src/gaslog
 
 # Move files to correct directory
-mv src/crun /mnt/user-data/usr/local/bin/crun
-mv src/tums /mnt/user-data/usr/local/bin/tums
-mv src/gaslog /mnt/user-data/usr/local/bin/gaslog
+cp src/crun /mnt/user-data/usr/local/bin/crun
+cp src/tums /mnt/user-data/usr/local/bin/tums
+cp src/gaslog /mnt/user-data/usr/local/bin/gaslog
 
 # Copy files to non-mounted directory
 cp /mnt/user-data/usr/local/bin/tums /usr/local/bin/tums
@@ -20,8 +20,3 @@ python3 src/setup.py
 
 # Copy config file to non-mounted directory
 cp /mnt/user-data/usr/local/etc/crun_config.json /usr/local/etc/crun_config.json 
-
-# Clean files
-rm -rf src/
-rm -rf github/
-rm -- $0
