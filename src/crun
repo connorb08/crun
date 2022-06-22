@@ -18,6 +18,7 @@ HOSTNAME = 'eerpdev.dev.tylertechnologies.com'
 # Main function
 # program : String to represent program name
 # arg_list : Arguments to pass into program
+# debug : Boolean if debugging should be enabled
 def main(program, arg_list, debug):
     '''
     Doc string
@@ -29,11 +30,14 @@ def main(program, arg_list, debug):
     # Start GAS in the background if it is not running
     if gasOffline:
         
+        # Pipe STDERR to /dev/null
         gas = 'startgas 2> /dev/null'
         
+        # Include STDERR if debug is true
         if debug:
             gas = 'startgas'
-            
+        
+        # Start gas in background tmux window
         subprocess.run(['tmux', 'new', '-d', '-s', 'crun', gas])
 
     # Build program
@@ -60,7 +64,7 @@ def getUser():
         with open('/usr/local/etc/crun_config.json', 'r') as f:
             config = json.load(f)
         user = config['user']
-    except: # return 0 if there is error getting user from file
+    except: # exit if there is error getting user from config
         print("Error getting user")
         exit()
 
@@ -71,11 +75,10 @@ if __name__ == '__main__':
     # Create program arguments
     parser = argparse.ArgumentParser('run')
     parser.add_argument('program', type=str, help='munis program to run in browser', )
-    parser.add_argument('program_args', nargs='*', type=str, help='pass args into program')
-    parser.add_argument('-d', action='store_true')
+    parser.add_argument('program_args', nargs='*', type=str, help='pass args into program (optional)')
+    parser.add_argument('-d', action='store_true', help='debug mode - includes STDERR in console output')
     args = parser.parse_args()
     CRUN_USER = getUser()
 
     # Pass arguments to main
     main(args.program, args.program_args, args.d)
-    # gasLogging()
