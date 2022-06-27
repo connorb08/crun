@@ -18,9 +18,3 @@ cp src/gaslog /mnt/user-data/usr/local/bin/gaslog
 cp /mnt/user-data/usr/local/bin/tums /usr/local/bin/tums
 cp /mnt/user-data/usr/local/bin/crun /usr/local/bin/crun
 cp /mnt/user-data/usr/local/bin/gaslog /usr/local/bin/gaslog
-
-# Run setup.py script
-python3 src/setup.py
-
-# Copy config file to non-mounted directory
-cp /mnt/user-data/usr/local/etc/crun_config.json /usr/local/etc/crun_config.json 
