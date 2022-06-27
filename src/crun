@@ -12,8 +12,7 @@ import os
 import json
 
 # CONFIG
-CRUN_USER = ''
-HOSTNAME = 'eerpdev.dev.tylertechnologies.com'
+HOSTNAME = os.getenv('EERP_DEV_DOMAIN')
 
 # Main function
 # program : String to represent program name
@@ -70,25 +69,12 @@ def main(program, arg_list, debug):
     args = '?'
     for arg in arg_list:
         args += f"Arg={arg}&"
-    url = f'https://{CRUN_USER}.{HOSTNAME}/gas/ua/r/application/{program}{args}'
+    url = f'https://{HOSTNAME}/gas/ua/r/application/{program}{args}'
 
     # Open URL in new tab
     webbrowser.open_new_tab(url)
 
     return 0
-
-def getUser():
-
-    try:
-        # Get user from config
-        with open('/usr/local/etc/crun_config.json', 'r') as f:
-            config = json.load(f)
-        user = config['user']
-    except: # exit if there is error getting user from config
-        print("Error getting user")
-        exit()
-
-    return user
 
 if __name__ == '__main__':
 
@@ -98,7 +84,6 @@ if __name__ == '__main__':
     parser.add_argument('program_args', nargs='*', type=str, help='pass args into program (optional)')
     parser.add_argument('-d', action='store_true', help='debug mode - includes STDERR in console output')
     args = parser.parse_args()
-    CRUN_USER = getUser()
 
     # Pass arguments to main
     main(args.program, args.program_args, args.d)
